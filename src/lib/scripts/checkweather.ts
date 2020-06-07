@@ -1,4 +1,5 @@
 import weather from '../weather';
+import creator from './creator';
 
 class Checkweather {
   now(): Promise<any> {
@@ -17,11 +18,31 @@ class Question {
   async open(): Promise<true | false> {
     try {
       let weather = await checkweather.now();
-      if (
-        checker.countMain(weather.weather[0].description) >= 0.7 &&
-        weather.main.feels_like >= 17
-      ) {
-        return true;
+      let t = creator.get();
+      if (t) {
+        if (weather.main.feels_like >= t.openTemp) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+  async close(): Promise<true | false> {
+    try {
+      let weather = await checkweather.now();
+      let t = creator.get();
+      if (t) {
+        if (weather.main.feels_like <= t.closeTemp) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -91,9 +112,4 @@ class Checker {
 
 let checker = new Checker();
 
-(async () => {
-  // let i = await new Question().open();
-  let i = await question.open();
-  console.log(i);
-  // console.log(i);
-})();
+export default question;
