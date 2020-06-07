@@ -1,0 +1,9 @@
+*node_modules
+*.lock
+*.env
+*nohup.out
+dist/
+*.log
+tsconfig*
+secret.ts
+test.ts
