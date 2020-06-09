@@ -1,3 +1,3 @@
-import worker from './worker';
+import Iterator from './lib/scripts/iterator';
 
-worker();
+new Iterator();

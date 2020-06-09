@@ -1,5 +1,5 @@
 import easyvk from 'easyvk';
-import cr from './cr'
+import cr from './cr';
 
 class Easyvk {
   auth() {
@@ -7,7 +7,16 @@ class Easyvk {
       username: cr.vk.username,
       password: cr.vk.password,
       v: '5.107',
+      mode: {
+        name: 'highload',
+
+        // Каждые 15 МС вся очередь гарантированно будет выполняться (точнее читайте ниже)
+        timeout: 50,
+      },
     });
+  }
+  randomId() {
+    return easyvk.randomId();
   }
 }
 

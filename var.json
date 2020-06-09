@@ -1,1 +1,9 @@
-{"openTemp":19,"closeTemp":18,"users":["191551772"],"sended":["191551772"],"opened":false}
+{
+  "openTemp": 19,
+  "closeTemp": 18,
+  "users": ["191551772", "320415368", "316842810"],
+  "sended": ["191551772", "320415368", "316842810"],
+  "opened": true,
+  "needOpen": false,
+  "needClose": false
+}

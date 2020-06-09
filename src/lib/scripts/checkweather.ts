@@ -2,6 +2,9 @@ import weather from '../weather';
 import creator from './creator';
 
 class Checkweather {
+  /**
+   * Проверяет текущую погоду и возвращает коллбэк
+   */
   now(): Promise<any> {
     return new Promise((resolve, reject) => {
       weather.getAllWeather(function (err: any, data: any) {
@@ -13,15 +16,21 @@ class Checkweather {
 }
 
 let checkweather = new Checkweather();
-
+interface Iquestion {
+  result: boolean;
+  temp: number;
+}
 class Question {
-  async open(): Promise<true | false> {
+  /**
+   * Проверяет, нужно ли открыть теплицу. Возвращает результат и температуру
+   */
+  async open(): Promise<Iquestion | false> {
     try {
       let weather = await checkweather.now();
       let t = creator.get();
       if (t) {
         if (weather.main.feels_like >= t.openTemp) {
-          return true;
+          return { result: true, temp: weather.main.feels_like };
         } else {
           return false;
         }
@@ -33,13 +42,16 @@ class Question {
       return false;
     }
   }
-  async close(): Promise<true | false> {
+  /**
+   * Проверяет, нужно ли закрыть теплицу. Возвращает результат и температуру
+   */
+  async close(): Promise<Iquestion | false> {
     try {
       let weather = await checkweather.now();
       let t = creator.get();
       if (t) {
         if (weather.main.feels_like <= t.closeTemp) {
-          return true;
+          return { result: true, temp: weather.main.feels_like };
         } else {
           return false;
         }
@@ -56,6 +68,9 @@ class Question {
 let question = new Question();
 
 class Checker {
+  /**
+   * Проверяет состояние погоды и выдаёт индекс, не используется
+   */
   countMain(description: string): number {
     let i: number;
     switch (description) {

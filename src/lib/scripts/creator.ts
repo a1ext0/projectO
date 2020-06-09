@@ -2,6 +2,9 @@ import fs from 'fs';
 import path from 'path';
 
 class Creator {
+  /**
+   * Забирает данные с файла и отдаёт в виде объекта
+   */
   get() {
     let file;
     let json: Iparams;
@@ -22,6 +25,9 @@ class Creator {
       return this.create();
     }
   }
+  /**
+   * Записывает файл в объект
+   */
   write(json: Iparams) {
     let str: string;
     try {
@@ -37,6 +43,10 @@ class Creator {
       return null;
     }
   }
+  /**
+   * Увеличить порог температуры
+   * @param data Температура открытия или закрытия
+   */
   increase(data: string) {
     let json = this.get();
     if (json) {
@@ -57,6 +67,10 @@ class Creator {
       return null;
     }
   }
+  /**
+   * Уменьшить порог температуры
+   * @param data Температура открытия или закрытия
+   */
   decrease(data: string) {
     let json = this.get();
     if (json) {
@@ -77,21 +91,41 @@ class Creator {
       return null;
     }
   }
+  /**
+   * Добавляет пользователя в рассылку на определённую позицию
+   * @param number на какую позицию добавить
+   * @param user ID пользователя
+   */
   addUser(number: number, user: string) {
     let json = this.get();
     if (json) {
-      json.users[number] = user;
+      let users = json.users;
+      json.users.forEach((element, i) => {
+        if (i < number) {
+          users[i] = element;
+        } else if (i == number) {
+          users[i] = user;
+          users[i + 1] = element;
+        } else {
+          users[i + 1] = element;
+        }
+      });
+      json.users = users;
       this.write(json);
       return true;
     } else {
       return null;
     }
   }
+  /**
+   * Добавляет пользователя в список отправленных
+   * @param user ID пользователя
+   */
   sendUser(user: string) {
     let json = this.get();
     if (json) {
       if (json.sended && json.sended[0] == '191551772') {
-        if (json.sended.includes(user)) {
+        if (!json.sended.includes(user)) {
           json.sended.push(user);
         } else {
           return null;
@@ -105,6 +139,9 @@ class Creator {
       return null;
     }
   }
+  /**
+   * Создаёт новый json файл
+   */
   create() {
     let str: string;
     let json: Iparams = {
@@ -113,6 +150,8 @@ class Creator {
       users: ['191551772'],
       sended: ['191551772'],
       opened: true,
+      needOpen: false,
+      needClose: false,
     };
     try {
       str = JSON.stringify(json);
@@ -127,6 +166,9 @@ class Creator {
       return null;
     }
   }
+  /**
+   * Записывает информацию об открытии теплицы
+   */
   open() {
     let json = this.get();
     if (json) {
@@ -137,6 +179,9 @@ class Creator {
       return null;
     }
   }
+  /**
+   * Записывает информацию о закрытии теплицы
+   */
   close() {
     let json = this.get();
     if (json) {
@@ -149,12 +194,14 @@ class Creator {
   }
 }
 
-interface Iparams {
+export interface Iparams {
   openTemp: number;
   closeTemp: number;
   users: Array<string>;
   sended: Array<string>;
   opened: boolean;
+  needOpen: boolean;
+  needClose: boolean;
 }
 
 export default new Creator();

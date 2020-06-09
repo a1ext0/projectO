@@ -4,10 +4,13 @@ declare module 'easyvk' {
   const EasyVk: EasyVkStatic;
   export default EasyVk;
 
-  interface VK {
+  export interface VK {
     call(method: string, data?: object, methodType?: string): Promise<any>;
     post(method: string, data?: object): Promise<any>;
     is(error: object, easyVkError: string): boolean;
+    longpoll: {
+      connect(params: object): Promise<Longpoll>;
+    };
     session: {
       access_token: string;
       save(): Promise<any>;
@@ -43,7 +46,7 @@ declare module 'easyvk' {
     };
   }
 
-  interface EasyVkStatic {
+  export interface EasyVkStatic {
     (object: Vkcon): Promise<VK>;
     randomId(): string;
     static: {
@@ -53,9 +56,6 @@ declare module 'easyvk' {
     };
     callbackAPI: {
       listen(params: object): object;
-    };
-    longpoll: {
-      connect(params: object): Promise<Longpoll>;
     };
   }
 
