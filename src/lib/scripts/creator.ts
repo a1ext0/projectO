@@ -22,7 +22,8 @@ class Creator {
         return null;
       }
     } catch (error) {
-      return this.create();
+      console.error(error);
+      return;
     }
   }
   /**
@@ -136,36 +137,6 @@ class Creator {
       this.write(json);
       return true;
     } else {
-      return null;
-    }
-  }
-  /**
-   * Создаёт новый json файл
-   */
-  create() {
-    let str: string;
-    let json: Iparams = {
-      openTemp: 18,
-      closeTemp: 18,
-      users: ['191551772'],
-      sended: ['191551772'],
-      opened: true,
-      needOpen: false,
-      needClose: false,
-      userN: 0,
-      i: 0,
-      day: 0,
-    };
-    try {
-      str = JSON.stringify(json);
-    } catch (error) {
-      return null;
-    }
-    try {
-      fs.writeFileSync(path.resolve('var.json'), str);
-      return json;
-    } catch (error) {
-      console.error(error);
       return null;
     }
   }

@@ -1,12 +1,13 @@
 {
   "name": "projectt",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon bin/dist/index.js",
     "debug": "tsc & nodemon --inspect dist/index.js",
-    "test": "dir && dir src"
+    "build": "tsc",
+    "start": "NODE_ENV=production node dist/index"
   },
   "dependencies": {
     "easyvk": "^2.6.2",

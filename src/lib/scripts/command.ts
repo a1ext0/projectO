@@ -33,9 +33,8 @@ class Command {
   send(vk: VK, temp: number, user: number, i: number, open: boolean) {
     let rand = Math.floor(Math.random() * 10);
     let info = json.get();
-    let id: string;
     if (info) {
-      id = info.users[user];
+      let id = info.users[user];
       if (id) {
         if (!info.needOpen) {
           info.needOpen = true;
@@ -65,8 +64,11 @@ class Command {
             }
             break;
         }
+        if (process.env.NODE_ENV != 'production') {
+          id = info.users[0];
+        }
         vk.call('messages.send', {
-          user_id: info.users[0], //TODO: заменить 0 на id
+          user_id: id, //TODO: заменить 0 на id
           random_id: easyvk.randomId(),
           message: message,
         });
@@ -109,6 +111,8 @@ class Exec {
       } else {
         info.opened = true;
         info.needOpen = false;
+        info.i = 0;
+        info.userN = 0;
         json.write(info);
       }
     } else {
@@ -129,6 +133,8 @@ class Exec {
       } else {
         info.opened = false;
         info.needClose = false;
+        info.i = 0;
+        info.userN = 0;
         json.write(info);
       }
     }
@@ -139,7 +145,7 @@ class Exec {
       });
       let user = sended[0];
       if (info) {
-        for (const userId of info.users) {
+        for (let userId of info.users) {
           let message: string;
           if (userId == m[3]) {
             if (open) {
@@ -154,8 +160,11 @@ class Exec {
               message = randPhrase.closeToAll(user, rand);
             }
           }
+          if (process.env.NODE_ENV != 'production') {
+            userId = info.users[0];
+          }
           vk.call('messages.send', {
-            user_id: info.users[0], //TODO: заменить 0 на userId
+            user_id: userId, //TODO: заменить 0 на userId
             random_id: easyvk.randomId(),
             message: message,
           });

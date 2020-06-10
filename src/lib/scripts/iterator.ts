@@ -4,10 +4,14 @@ import json from './creator';
 
 class Iterator {
   iterator: NodeJS.Timeout;
+  timeout = 1000 * 60 * 5;
   constructor() {
     this.f();
     vk.lp();
-    this.iterator = setInterval(this.f.bind(this), 10000);
+    if (process.env.NODE_ENV != 'production') {
+      this.timeout = 10000;
+    }
+    this.iterator = setInterval(this.f.bind(this), this.timeout);
   }
   /**
    * Основная рабочая функция итератора
@@ -28,7 +32,7 @@ class Iterator {
         let weather = await checkweather.open();
         if (!info.opened && weather && weather.result) {
           info.i++;
-          if (info.i > 2 && info.userN > info.users.length) {
+          if (info.i > 2 && info.userN < info.users.length) {
             info.i = 1;
             info.userN++;
           }
@@ -43,7 +47,7 @@ class Iterator {
         let weather = await checkweather.close();
         if (info.opened && weather && weather.result) {
           info.i++;
-          if (info.i > 2 && info.userN > info.users.length) {
+          if (info.i > 2 && info.userN < info.users.length) {
             info.i = 1;
             info.userN++;
           }
