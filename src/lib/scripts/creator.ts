@@ -152,6 +152,9 @@ class Creator {
       opened: true,
       needOpen: false,
       needClose: false,
+      userN: 0,
+      i: 0,
+      day: 0,
     };
     try {
       str = JSON.stringify(json);
@@ -202,6 +205,9 @@ export interface Iparams {
   opened: boolean;
   needOpen: boolean;
   needClose: boolean;
+  userN: number;
+  i: number;
+  day: number;
 }
 
 export default new Creator();

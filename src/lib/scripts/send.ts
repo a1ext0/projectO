@@ -15,7 +15,9 @@ class Vkontakte {
         .then((vk) => {
           resolve(vk);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          console.error(err);
+        });
     });
   }
   /**
@@ -50,39 +52,8 @@ class Vkontakte {
    * @param i Номер итерации для юзера
    */
   async open(user: number, temp: number, i: number) {
-    let info = json.get();
     let vk = await this.vk;
-    let id: string;
-    if (info) {
-      id = info.users[user];
-      if (id) {
-        json.sendUser(id);
-        let message: string;
-        switch (i) {
-          case 1:
-            message = `На улице уже ${temp} градусов! Пора открыть теплицу!`;
-            break;
-          case 2:
-            message = `Помидоры сгорят!! Откройте их, пожааалуйста!`;
-            break;
-          default:
-            message = `Рекомендую открыть теплицу`;
-            break;
-        }
-        vk.call('messages.send', {
-          user_id: info.users[0], //TODO: заменить 0 на id
-          random_id: easyvk.randomId(),
-          message: message,
-        });
-      } else {
-        vk.call('messages.send', {
-          user_id: info.users[0],
-          random_id: easyvk.randomId(),
-          message: 'Уже предупредила всех, никто не ответил!!!',
-        });
-      }
-    } else {
-    }
+    command.send(vk, temp, user, i, true);
   }
   /**
    * Отправляет сообщение о необходимости закрыть теплицу
@@ -91,39 +62,8 @@ class Vkontakte {
    * @param i Номер итерации для юзера
    */
   async close(user: number, temp: number, i: number) {
-    let info = json.get();
     let vk = await this.vk;
-    let id: string;
-    if (info) {
-      id = info.users[user];
-      if (id) {
-        json.sendUser(id);
-        let message: string;
-        switch (i) {
-          case 1:
-            message = `Холодает! Сейчас ${temp} градусов! Пора закрывать теплицу!`;
-            break;
-          case 2:
-            message = `Закройте теплицу, пока там всё не промёрзло`;
-            break;
-          default:
-            message = `Рекомендую закрыть теплицу`;
-            break;
-        }
-        vk.call('messages.send', {
-          user_id: info.users[0], //TODO: заменить 0 на id
-          random_id: easyvk.randomId(),
-          message: message,
-        });
-      } else {
-        vk.call('messages.send', {
-          user_id: info.users[0],
-          random_id: easyvk.randomId(),
-          message: 'Уже предупредила всех, никто не ответил!!!',
-        });
-      }
-    } else {
-    }
+    command.send(vk, temp, user, i, false);
   }
 }
 
