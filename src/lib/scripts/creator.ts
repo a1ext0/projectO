@@ -179,6 +179,7 @@ export interface Iparams {
   userN: number;
   i: number;
   day: number;
+  temp: number;
 }
 
 export default new Creator();

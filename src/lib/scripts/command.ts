@@ -36,9 +36,16 @@ class Command {
     if (info) {
       let id = info.users[user];
       if (id) {
-        if (!info.needOpen) {
-          info.needOpen = true;
-          json.write(info);
+        if (open) {
+          if (!info.needOpen) {
+            info.needOpen = true;
+            json.write(info);
+          }
+        } else {
+          if (!info.needClose) {
+            info.needClose = true;
+            json.write(info);
+          }
         }
         let message: string;
         switch (i) {
@@ -111,6 +118,7 @@ class Exec {
       } else {
         info.opened = true;
         info.needOpen = false;
+        info.needClose = false;
         info.i = 0;
         info.userN = 0;
         json.write(info);
@@ -132,6 +140,7 @@ class Exec {
         return;
       } else {
         info.opened = false;
+        info.needOpen = false;
         info.needClose = false;
         info.i = 0;
         info.userN = 0;
